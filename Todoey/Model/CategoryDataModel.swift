@@ -10,5 +10,6 @@ import RealmSwift
 
 class CategoryDataModel: Object {
     @objc dynamic var name: String?
+    @objc dynamic var bgColour: String?
     var itemsList = List<ItemDataModel>()
 }

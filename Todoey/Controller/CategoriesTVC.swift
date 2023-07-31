@@ -26,6 +26,7 @@ class CategoriesTVC: SwipeableTVC {
         let alertAction = UIAlertAction(title: "Add", style: .default){ action in
             let category = CategoryDataModel()
             category.name = textField.text!
+            category.bgColour = UIColor.randomFlat().hexValue()
             self.addCategory(for: category)
             self.tableView.reloadData()
         }
@@ -74,6 +75,7 @@ class CategoriesTVC: SwipeableTVC {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categoriesList[indexPath.row].name
+        cell.backgroundColor = UIColor(hexString: categoriesList[indexPath.row].bgColour ?? "ffffff")
         return cell
     }
     
