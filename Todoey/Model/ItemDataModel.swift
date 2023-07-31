@@ -12,6 +12,7 @@ class ItemDataModel: Object{
     
     @objc dynamic var name: String?
     @objc dynamic var isChecked = false
+    @objc dynamic var dateAdded: Date?
     var parentCategory = LinkingObjects(fromType: CategoryDataModel.self, property: "itemsList")
     
 }

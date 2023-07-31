@@ -82,7 +82,15 @@ class CategoriesTVC: SwipeableTVC {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        performSegue(withIdentifier: "fromCollecition", sender: self)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        var vc = segue.destination as! ItemsTVC
+        if let indexPath = tableView.indexPathForSelectedRow {
+            vc.selectedCategory =  categoriesList[indexPath.row]
+        }
     }
 }
 
