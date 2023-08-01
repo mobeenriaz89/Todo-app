@@ -40,11 +40,13 @@ class CategoriesTVC: SwipeableTVC {
         var textField = UITextField()
         let alert = UIAlertController(title: "Add Category", message: "", preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "Add", style: .default){ action in
-            let category = CategoryDataModel()
-            category.name = textField.text!
-            category.bgColour = UIColor.randomFlat().hexValue()
-            self.addCategory(for: category)
-            self.tableView.reloadData()
+            if let text = textField.text, !text.isEmpty{
+                let category = CategoryDataModel()
+                category.name = text
+                category.bgColour = UIColor.randomFlat().hexValue()
+                self.addCategory(for: category)
+                self.tableView.reloadData()
+            }
         }
         alert.addTextField{ tf in
             tf.placeholder = "Category name here"
