@@ -17,6 +17,7 @@ class ItemsTVC: SwipeableTVC {
     var selectedCategory = CategoryDataModel(){
         didSet{
             fetchItems()
+            title = selectedCategory.name
         }
     }
     
@@ -32,7 +33,6 @@ class ItemsTVC: SwipeableTVC {
             item.name = textField.text!
             item.isChecked = false
             item.dateAdded = Date()
-            item.bgColour = self.selectedCategory.bgColour
             self.addNewItem(for: item)
             self.tableView.reloadData()
         }
@@ -68,7 +68,7 @@ class ItemsTVC: SwipeableTVC {
         if let item = itemsList?[indexPath.row] {
             cell.textLabel?.text = item.name
             cell.accessoryType = item.isChecked ? .checkmark : .none
-            if let color = UIColor(hexString: item.bgColour ?? "ffffff"){
+            if let color = UIColor(hexString: selectedCategory.bgColour ?? "ffffff"){
                 let percentage =  Float(indexPath.row)/Float(itemsList?.count ?? 1)
                 cell.backgroundColor = color.lighten(byPercentage: CGFloat(percentage))
                 cell.textLabel?.textColor = ContrastColorOf(cell.backgroundColor!, returnFlat: true)

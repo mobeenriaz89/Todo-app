@@ -7,15 +7,31 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoriesTVC: SwipeableTVC {
     
     let realm = try! Realm()
     var categoriesList: Results<CategoryDataModel>!
-        
+    let appearance = UINavigationBarAppearance()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setNavBarAppearance(with: UIColor.randomFlat())
         fetchCategories()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchCategories()
+    }
+    
+    func setNavBarAppearance(with color: UIColor){
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = color
+        appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: ContrastColorOf(color, returnFlat: true)]
+        navigationController?.navigationBar.standardAppearance = appearance;
+        navigationController?.navigationBar.scrollEdgeAppearance =  navigationController?.navigationBar.standardAppearance
+        navigationController?.navigationBar.tintColor = ContrastColorOf(color, returnFlat: true)
     }
     
     //MARK: -DATA MANIPULATION
@@ -52,6 +68,9 @@ class CategoriesTVC: SwipeableTVC {
     private func fetchCategories(){
         categoriesList = realm.objects(CategoryDataModel.self)
         tableView.reloadData()
+        if categoriesList.count > 0, let color = UIColor(hexString: categoriesList[0].bgColour ?? "000000"){
+            setNavBarAppearance(with: color)
+        }
     }
     
     private func deleteCategory(category: CategoryDataModel){
@@ -75,7 +94,10 @@ class CategoriesTVC: SwipeableTVC {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categoriesList[indexPath.row].name
-        cell.backgroundColor = UIColor(hexString: categoriesList[indexPath.row].bgColour ?? "ffffff")
+        if let color = UIColor(hexString: categoriesList[indexPath.row].bgColour ?? "ffffff"){
+            cell.backgroundColor = color
+            cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+        }
         return cell
     }
     
@@ -86,6 +108,9 @@ class CategoriesTVC: SwipeableTVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "fromCollecition", sender: self)
         tableView.deselectRow(at: indexPath, animated: true)
+        if let color = UIColor(hexString: categoriesList[indexPath.row].bgColour ?? "000000"){
+            setNavBarAppearance(with: color)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
